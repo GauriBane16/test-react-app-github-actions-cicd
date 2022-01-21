@@ -19,6 +19,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "covid-19-test-cicd-actions-1"
           heroku_email: "sunitagamne16@gmail.com"
-          appdir: "tests/test-1"
+          appdir: ""
           healthcheck: "https://covid-19-test-cicd-actions-1.herokuapp.com/"
           env_file: ".env"  
