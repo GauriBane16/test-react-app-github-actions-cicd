@@ -19,3 +19,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "covid-19-test-cicd-actions-2"
           heroku_email: "sunitagamne16@gmail.com"
+          run: heroku container:login
