@@ -29,3 +29,9 @@ jobs:
     - run: npm i
     - run: npm run build --if-present
     - run: npm test
+    - uses: actions/checkout@v2
+    - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "covid-19-test-cicd-actions" #Must be unique in Heroku
+          heroku_email: "sunitagamne16@gmail.com"
