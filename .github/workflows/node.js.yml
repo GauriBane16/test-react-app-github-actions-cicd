@@ -29,6 +29,8 @@ jobs:
           npm i
           npm run build --if-present
           npm test
+          HTTP_CODE=$(curl --write-out "%{http_code}\n" "http://localhost:7860/api/v1.0/vendor/vendorDetails" --output output.txt --silent)
+          echo $HTTP_CODE
       env : 
         CI : true    
   deploy:
