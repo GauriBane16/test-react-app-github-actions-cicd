@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: gauribane16/test-react-app-github-actions-cicdy@main
+      - uses: gauribane16/test-react-app-github-actions-cicd@main
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "gauribane16-hd-test-1"
