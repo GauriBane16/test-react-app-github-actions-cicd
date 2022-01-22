@@ -35,13 +35,16 @@ jobs:
           npm test
       env : 
         CI : true  
-  fetch :
+  create :
      runs-on: ubuntu-latest
      steps:
       - uses: actions/checkout@v2
       - name: Create folder
         run: |
-          sudo mkdir Test 
+          sudo mkdir Test
+  fetch :
+     runs-on: ubuntu-latest
+     steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
