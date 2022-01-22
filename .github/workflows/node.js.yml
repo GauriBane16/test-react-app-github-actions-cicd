@@ -8,7 +8,11 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+    
+defaults:
+  run:
+    working-directory: src
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,7 +42,6 @@ jobs:
       - name: Create folder
         run: |
           sudo mkdir -p /Test 
-          working-directory: src
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
