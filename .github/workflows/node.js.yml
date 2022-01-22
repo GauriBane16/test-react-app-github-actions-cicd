@@ -35,13 +35,24 @@ jobs:
           npm test
       env : 
         CI : true  
-  use-action:
+  create-file:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Create directory and create file in homedir
+        run: |
+          ls -la ~/
+          mkdir ~/.zorg
+          echo First        > ~/.zorg/home.txt
+          echo Second Line >> ~/.zorg/home.txt
+          echo Third       >> ~/.zorg/home.txt
+          ls -la ~/.zorg/
+  fetch:
     runs-on: ubuntu-latest
     steps:
-      - uses: gautemo/fetch-api-data-action@1.0.2
-        with:
-          url: 'https://fake-movie-database-api.herokuapp.com/api?s=batman'
-          file: 'backup/data.json'    
+        - uses: actions/checkout@v2
+        - name: Fetch data
+          run: |
+              curl https://fake-movie-database-api.herokuapp.com/api?s=batman -o myfile.json   
   deploy:
     runs-on: ubuntu-latest
     needs : build
