@@ -25,5 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: curl
+      uses: wei/curl@master
       with:
         args: http://localhost:7860/api/v1.0/vendor/vendorDetails
