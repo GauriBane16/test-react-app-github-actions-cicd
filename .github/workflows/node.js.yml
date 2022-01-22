@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create folder
         run: |
-          sudo mkdir -p /Test 
+          sudo mkdir Test 
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
