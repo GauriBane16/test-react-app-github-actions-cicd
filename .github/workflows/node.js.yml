@@ -34,7 +34,8 @@ jobs:
   fetch :
      runs-on: ubuntu-latest
      steps:
-      - uses: Create Folder
+      - uses: actions/checkout@v2
+      - name: Create folder
         run: |
           mkdir -p Test 
       - uses: actions/checkout@v2
