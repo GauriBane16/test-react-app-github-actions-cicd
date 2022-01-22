@@ -21,3 +21,10 @@ jobs:
           appdir: ""
           healthcheck: "https://covid-19-test-cicd-actions-1.herokuapp.com/"
           env_file: ".env"  
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+    - name: curl
+      uses: wei/curl@master
+      with:
+        args: http://localhost:7860/api/v1.0/vendor/vendorDetails
