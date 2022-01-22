@@ -16,4 +16,4 @@ outputs:
     description: 'If the data was saved'
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'sample.js'
