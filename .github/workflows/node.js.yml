@@ -35,14 +35,7 @@ jobs:
           npm test
       env : 
         CI : true  
-  create :
-     runs-on: ubuntu-latest
-     steps:
-      - uses: actions/checkout@v2
-      - name: Create File
-        uses : "./"
-        env : 
-          FILE_NAME : "test_file"
+  
   fetch :
      runs-on: ubuntu-latest
      steps:
@@ -51,6 +44,9 @@ jobs:
         run: |
             HTTP_CODE=$(curl --write-out "%{http_code}\n" "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22" -o output.txt )
             echo $HTTP_CODE
+      - with:
+          url: 'https://fake-movie-database-api.herokuapp.com/api?s=batman'
+          file: 'backup/data.json'      
   deploy:
     runs-on: ubuntu-latest
     needs : build
