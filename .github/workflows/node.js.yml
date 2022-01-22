@@ -40,12 +40,11 @@ jobs:
       steps:
       - name: Create directory and create file in homedir
         run: |
-          ls -la ~/
-          mkdir ~/.zorg
-          echo First        > ~/.zorg/home.txt
-          echo Second Line >> ~/.zorg/home.txt
-          echo Third       >> ~/.zorg/home.txt
-          ls -la ~/.zorg/
+          mkdir test
+          echo First        > ~/test/home.txt
+          echo Second Line >> ~/test/home.txt
+          echo Third       >> ~/test/home.txt
+          ls -la test
   fetch:
     runs-on: ubuntu-latest
     steps:
