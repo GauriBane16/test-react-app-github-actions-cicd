@@ -39,15 +39,15 @@ jobs:
      runs-on: ubuntu-latest
      steps:
       - uses: actions/checkout@v2
-      - name: Create folder
-        run: |
-          sudo mkdir Test
+      - name: Create File
+        uses : "./"
+        env : 
+          FILE_NAME : "test_file"
+          FILE_DATA : "hello\nthis\nis\na\ntest"
   fetch :
      runs-on: ubuntu-latest
      steps:
       - uses: actions/checkout@v2
-      - with: 
-          fileName: 'myTemporaryFile.txt'
       - name: fetch data using curl
         run: |
             HTTP_CODE=$(curl --write-out "%{http_code}\n" "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22" -o output.txt )
