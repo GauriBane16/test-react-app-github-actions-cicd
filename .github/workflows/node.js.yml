@@ -40,7 +40,3 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "test-react-app-cicd"
           heroku_email: "sunitagamne16@gmail.com"
-          appdir: ""
-          healthcheck: "https://covid-19-test-cicd-actions-1.herokuapp.com/"
-          env_file: ".env"  
-  
