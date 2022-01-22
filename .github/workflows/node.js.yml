@@ -30,20 +30,7 @@ jobs:
           npm run build --if-present
           npm test
       env : 
-        CI : true  
-  create-file:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Create file
-        run: |
-          printf "Hello\nWorld\n" > hw.txt
-  fetch:
-    runs-on: ubuntu-latest
-    steps:
-        - uses: actions/checkout@v2
-        - name: Fetch data
-          run: |
-              curl https://fake-movie-database-api.herokuapp.com/api?s=batman -o myfile.json   
+        CI : true     
   deploy:
     runs-on: ubuntu-latest
     needs : build
