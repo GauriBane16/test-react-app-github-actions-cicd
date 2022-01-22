@@ -34,6 +34,9 @@ jobs:
   fetch :
      runs-on: ubuntu-latest
      steps:
+      - uses: Create Folder
+      run: |
+       mkdir -p Test 
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
