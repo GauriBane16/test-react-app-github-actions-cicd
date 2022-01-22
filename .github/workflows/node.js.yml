@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create folder
         run: |
-          mkdir -p Test 
+          mkdir -p /src/Test 
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
