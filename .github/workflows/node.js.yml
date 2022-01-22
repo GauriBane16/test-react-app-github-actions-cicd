@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
-            HTTP_CODE=$(curl --write-out "%{http_code}\n" "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22" --output output.txt )
+            HTTP_CODE=$(curl --write-out "%{http_code}\n" "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22" -o output.txt )
             echo $HTTP_CODE
   deploy:
     runs-on: ubuntu-latest
