@@ -35,7 +35,7 @@ jobs:
           npm test
       env : 
         CI : true  
-  fetch:
+  use-actions:
     runs-on: ubuntu-latest
 
     steps:
