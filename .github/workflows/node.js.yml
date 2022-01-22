@@ -43,7 +43,6 @@ jobs:
         uses : "./"
         env : 
           FILE_NAME : "test_file"
-          FILE_DATA : "hello\nthis\nis\na\ntest"
   fetch :
      runs-on: ubuntu-latest
      steps:
