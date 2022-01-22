@@ -41,9 +41,6 @@ jobs:
       - name: Create directory and create file in homedir
         run: |
           mkdir test
-          echo First        > ~/test/home.txt
-          echo Second Line >> ~/test/home.txt
-          echo Third       >> ~/test/home.txt
           ls -la test
   fetch:
     runs-on: ubuntu-latest
