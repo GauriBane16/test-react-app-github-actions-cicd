@@ -42,10 +42,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo REACT_APP_CLIENT_ID=$(jq -r '.result.envDetails.REACT_APP_CLIENT_ID' data.json) >> .env
-          echo REACT_APP_API_URL=$(jq -r '.result.envDetails.REACT_APP_API_URL' data.json) >> .env
-          echo REACT_APP_STRIPE_PUBLIC_KEY=$(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' data.json) >> .env
-          echo REACT_APP_CLIENT_NAME=$(jq -r '.result.envDetails.vendorName' data.json) >> .env
+          echo "Hi" >>.env
           cat .env
           
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
@@ -75,14 +72,9 @@ jobs:
           # email subject
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
           # email body as text
-          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.outputResult }}."
+          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.outputResult.appName }}."
           # comma-separated string, send email to
           to: sunitagamne16@gmail.com
           # from email name
           from: Gauri Bane    
-      - name: Deploy on Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
-          heroku_email: "sunitagauri16@gmail.com"
+      
