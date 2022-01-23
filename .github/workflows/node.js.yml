@@ -51,6 +51,21 @@ jobs:
         run: |
           echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
           echo '::set-output name=outputResult::'$(jq -r '.result' data.json)
+      - name: Deploy on Heroku
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
+          heroku_email: "sunitagauri16@gmail.com"   
+      - name: fetch the json value
+        run: |
+         githubjson=`cat $GITHUB_EVENT_PATH`
+         echo $githubjson
+         number=`echo $(jq -r '.number' <<< "$githubjson")`
+         PRTitle=`echo $(jq -r '.pull_request.title' <<< "$githubjson")`
+         PRUrl=`echo $(jq -r '.pull_request.html_url' <<< "$githubjson")`
+         PRBody=`echo $(jq -r '.pull_request.body' <<< "$githubjson")    
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
