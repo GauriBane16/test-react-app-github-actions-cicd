@@ -8,6 +8,10 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+defaults:
+  run:
+    working-directory: ./    
 
 jobs:
   build:
@@ -38,7 +42,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
-          response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json)
+          response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" --output output.json)
           echo $response
           touch .env
           echo REACT_APP_CLIENT_ID=$response.result.envDetails.REACT_APP_CLIENT_ID >> .env
@@ -47,7 +51,7 @@ jobs:
           echo REACT_APP_CLIENT_NAME=$response.result.vendorName >> .env
           cat .env 
           touch data.json
-          echo $response.result >> .env
+          echo $response.result >> data.json
           cat data.json
        # Write env file 
       - name: Create env file
