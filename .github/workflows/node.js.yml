@@ -45,13 +45,13 @@ jobs:
           response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" --output output.json)
           echo $response
           touch .env
-          echo REACT_APP_CLIENT_ID=$response.result.envDetails.REACT_APP_CLIENT_ID >> .env
-          echo REACT_APP_API_URL=$response.result.envDetails.REACT_APP_API_URL >> .env
-          echo REACT_APP_STRIPE_PUBLIC_KEY=$response.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY >> .env
-          echo REACT_APP_CLIENT_NAME=$response.result.vendorName >> .env
+          echo REACT_APP_CLIENT_ID=${{response.result.envDetails.REACT_APP_CLIENT_ID}} >> .env
+          echo REACT_APP_API_URL=${{response.result.envDetails.REACT_APP_API_URL}} >> .env
+          echo REACT_APP_STRIPE_PUBLIC_KEY=${{response.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY}} >> .env
+          echo REACT_APP_CLIENT_NAME=${{response.result.vendorName}} >> .env
           cat .env 
           touch data.json
-          echo $response.result >> data.json
+          echo ${{response.result}} >> data.json
           cat data.json
        # Write env file 
       - name: Create env file
