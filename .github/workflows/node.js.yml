@@ -50,14 +50,7 @@ jobs:
         id: parse_data
         run: |
           echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
-          echo '::set-output name=outputResult::'$(jq -r '.result' data.json)
-      - name: Deploy on Heroku
-        if: steps.cache.outputs.cache-hit != 'true'
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
-          heroku_email: "sunitagauri16@gmail.com"   
+         
       - name: fetch the json value
         run: |
          echo number=`echo $(jq -r '.appName' data.json)` 
@@ -72,8 +65,16 @@ jobs:
         with:
           path: data.json
           key: ${{ hashFiles('data.json') }}  
+      - name: Deploy on Heroku
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
+          heroku_email: "sunitagauri16@gmail.com"    
       - name: Send mail
-        if: always()
+        #if: always()
+        if: steps.cache.outputs.cache-hit != 'true'
         uses: dawidd6/action-send-mail@v2
         with:
           # mail server settings
@@ -85,7 +86,7 @@ jobs:
           # email subject
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
           # email body as text
-          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.outputResult }}.appName."
+          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.result }}."
           # comma-separated string, send email to
           to: sunitagamne16@gmail.com
           # from email name
