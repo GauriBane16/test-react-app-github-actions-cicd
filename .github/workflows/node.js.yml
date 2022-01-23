@@ -41,11 +41,14 @@ jobs:
           response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json)
           echo $response
           touch .env
-          echo REACT_APP_CLIENT_ID=$response.envDetails.REACT_APP_CLIENT_ID >> .env
-          echo REACT_APP_API_URL=$response.envDetails.REACT_APP_API_URL >> .env
-          echo REACT_APP_STRIPE_PUBLIC_KEY=$response.envDetails.REACT_APP_STRIPE_PUBLIC_KEY >> .env
-          echo REACT_APP_CLIENT_NAME=$response.vendorName >> .env
+          echo REACT_APP_CLIENT_ID=$response.result.envDetails.REACT_APP_CLIENT_ID >> .env
+          echo REACT_APP_API_URL=$response.result.envDetails.REACT_APP_API_URL >> .env
+          echo REACT_APP_STRIPE_PUBLIC_KEY=$response.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY >> .env
+          echo REACT_APP_CLIENT_NAME=$response.result.vendorName >> .env
           cat .env 
+          touch data.json
+          echo $response.result >> .env
+          cat data.json
        # Write env file 
       - name: Create env file
         run: |
@@ -53,7 +56,7 @@ jobs:
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
-        run: echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
+        run: echo '::set-output name=result::'$(jq -r '.appName' data.json)
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
