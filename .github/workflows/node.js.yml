@@ -38,20 +38,20 @@ jobs:
       - uses: actions/checkout@v2
       - name: fetch data using curl
         run: |
-          response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" --output output.json)
+          response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o output.json).result
           echo $response
-          touch .env
-          echo REACT_APP_CLIENT_ID="Hello" >> .env
-          cat .env 
+          cat << EOF > .env
+          API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com"
+          EOF
       - name: Create json file
         run: |
           touch data.json
-          echo $(jq -r '.result' $response) >> data.json
+          echo $response >> data.json
           cat data.json
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
-        run: echo '::set-output name=result::'$(jq -r '.appName' data.json)
+        run: echo '::set-output name=result::'$(jq -r 'result.appName' data.json)
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
