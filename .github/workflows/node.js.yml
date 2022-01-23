@@ -60,12 +60,13 @@ jobs:
           heroku_email: "sunitagauri16@gmail.com"   
       - name: fetch the json value
         run: |
-         githubjson=`cat $GITHUB_EVENT_PATH`
+         githubjson=`cat ${{ steps.parse_data.outputs.outputResult }}`
          echo $githubjson
-         number=`echo $(jq -r '.number' <<< "$githubjson")`
-         PRTitle=`echo $(jq -r '.pull_request.title' <<< "$githubjson")`
-         PRUrl=`echo $(jq -r '.pull_request.html_url' <<< "$githubjson")`
-         PRBody=`echo $(jq -r '.pull_request.body' <<< "$githubjson")    
+         touch .env
+         number=`echo $(jq -r '.appName' <<< "$githubjson")`
+         PRTitle=`echo $(jq -r '.prefix' <<< "$githubjson")`
+         PRUrl=`echo $(jq -r '.emalAddress' <<< "$githubjson")`
+         cat .env
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
@@ -87,7 +88,7 @@ jobs:
           # email subject
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
           # email body as text
-          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.outputResult.appName }}."
+          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.outputResult }}.appName."
           # comma-separated string, send email to
           to: sunitagamne16@gmail.com
           # from email name
