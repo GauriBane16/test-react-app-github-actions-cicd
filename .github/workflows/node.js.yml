@@ -44,7 +44,7 @@ jobs:
           echo REACT_APP_CLIENT_ID="Hello" >> .env
           cat .env 
           touch data.json
-          echo ${{response.result}} >> data.json
+          echo '::set-output name=result::'$(jq -r '.result' $response) >> data.json
           cat data.json
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
