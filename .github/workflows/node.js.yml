@@ -72,5 +72,5 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "${{ steps.parse_data.outputs.result.appName }}-doorstep"
+          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
           heroku_email: "sunitagauri16@gmail.com"
