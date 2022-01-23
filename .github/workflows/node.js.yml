@@ -53,9 +53,9 @@ jobs:
          
       - name: fetch the json value
         run: |
-         echo number=`echo $(jq -r '.appName' data.json)` 
-         echo PRTitle=`echo $(jq -r '.prefix' data.json)` 
-         echo PRUrl=`echo $(jq -r '.emalAddress' data.json)` 
+         echo number=`echo $(jq -r '.appName' >>> data.json)` 
+         echo PRTitle=`echo $(jq -r '.prefix' >>> data.json)` 
+         echo PRUrl=`echo $(jq -r '.emalAddress' >>> data.json)` 
          
           
       # Compare the response to the previous run, using a hash of the response as the cache key
