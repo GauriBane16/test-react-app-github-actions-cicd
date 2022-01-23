@@ -36,9 +36,7 @@ jobs:
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
-        run: |
-            HTTP_CODE=$(curl --write-out "%{http_code}\n" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" --output output.txt )
-            echo $HTTP_CODE
+        run: curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json
   deploy:
     runs-on: ubuntu-latest
     needs: build
