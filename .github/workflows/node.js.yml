@@ -41,7 +41,7 @@ jobs:
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
-        run: echo '::set-output name=result::'$(jq -r '.result' data.json)
+        run: echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
