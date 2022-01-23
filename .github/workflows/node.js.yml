@@ -37,7 +37,7 @@ jobs:
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
-        run: curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json
+        run: response=$(curl -sb -H "Accept= application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json)
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
