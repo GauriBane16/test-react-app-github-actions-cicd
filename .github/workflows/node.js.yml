@@ -53,10 +53,6 @@ jobs:
           touch data.json
           echo ${{response.result}} >> data.json
           cat data.json
-       # Write env file 
-      - name: Create env file
-        run: |
-          
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
