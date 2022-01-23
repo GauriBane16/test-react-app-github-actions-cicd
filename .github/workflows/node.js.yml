@@ -61,11 +61,11 @@ jobs:
       - name: fetch the json value
         run: |
          githubjson=`cat ${{ steps.parse_data.outputs.outputResult }}`
-         echo $githubjson
+         echo $githubjson.appName
          touch .env
-         number=`echo $(jq -r '.appName' <<< "$githubjson")`
-         PRTitle=`echo $(jq -r '.prefix' <<< "$githubjson")`
-         PRUrl=`echo $(jq -r '.emalAddress' <<< "$githubjson")`
+         number=`echo $(jq -r '.appName' <<< "${{ steps.parse_data.outputs.outputResult }}")` >>.env
+         PRTitle=`echo $(jq -r '.prefix' <<< "${{ steps.parse_data.outputs.outputResult }}")` >>.env
+         PRUrl=`echo $(jq -r '.emalAddress' <<< "${{ steps.parse_data.outputs.outputResult }}")` >>.env
          cat .env
           
       # Compare the response to the previous run, using a hash of the response as the cache key
