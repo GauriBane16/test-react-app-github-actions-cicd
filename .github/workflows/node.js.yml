@@ -47,11 +47,13 @@ jobs:
           echo REACT_APP_STRIPE_PUBLIC_KEY=$(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' data.json) >> .env
           echo REACT_APP_CLIENT_NAME=$(jq -r '.result.envDetails.vendorName' data.json) >> .env
           cat .env
-          echo '::set-output name=outputResult::'$(jq -r '.result' data.json)
+          
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
-        run: echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
+        run: |
+          echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
+          echo '::set-output name=outputResult::'$(jq -r '.result' data.json)
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
