@@ -64,7 +64,7 @@ jobs:
           heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
           heroku_email: "sunitagauri16@gmail.com"
           buildpack: "https://github.com/HashNuke/heroku-buildpack-elixir.git"
-          healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
+          healthcheck: "https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com/health"
           procfile: "web: npm start"
           env_file: ".env"
         env:
