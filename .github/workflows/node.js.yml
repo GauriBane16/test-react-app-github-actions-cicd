@@ -8,7 +8,11 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+#on:
+  #schedule:
+    # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
+    #- cron:  '*/16 * * * *'
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,25 +35,44 @@ jobs:
           npm test
       env : 
         CI : true  
-  fetch :
+  deploy :
      runs-on: ubuntu-latest
      needs : build
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
-        run: curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json
+        run: curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o config.json
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
-        run: echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
+        run: |
+          echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
+          echo '::set-output name=id::'$(jq -r '.result._id' config.json)
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
         id: cache
         uses: actions/cache@v2
         with:
-          path: data.json
-          key: ${{ hashFiles('data.json') }}  
+          path: config.json
+          key: ${{ hashFiles('config.json') }}
+       #if: needs.build.outputs.cache-hit != 'true'    
+      - name: Deploy on Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
+          heroku_email: "sunitagauri16@gmail.com"
+          buildpack: "https://github.com/HashNuke/heroku-buildpack-elixir.git"
+          healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
+          procfile: "web: npm start"
+          env_file: ".env"
+        env:
+          HD_FIREBASE_API_KEY: "Hi"
+          HD_RANDOM_DATA: "Hello"
+      - name: Update Vendor Details    
+        run: |
+          curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
       - name: Send mail
         if: always()
         uses: dawidd6/action-send-mail@v2
@@ -63,14 +86,9 @@ jobs:
           # email subject
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
           # email body as text
-          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.result }}."
+          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.appName }}."
           # comma-separated string, send email to
           to: sunitagamne16@gmail.com
           # from email name
           from: Gauri Bane    
-      - name: Deploy on Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
-          heroku_email: "sunitagauri16@gmail.com"
+      
