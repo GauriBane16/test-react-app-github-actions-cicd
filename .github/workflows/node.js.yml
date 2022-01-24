@@ -70,7 +70,7 @@ jobs:
           from: Gauri Bane    
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
-	      if: steps.cache.outputs.cache-hit != 'true'
+		#if: steps.cache.outputs.cache-hit != 'true'
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
