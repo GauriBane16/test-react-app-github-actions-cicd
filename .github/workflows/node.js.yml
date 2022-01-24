@@ -30,7 +30,7 @@ jobs:
         run: |
           echo '::set-output name=appName::'$(jq -r '.result.appName' data.json)
           echo '::set-output name=id::'$(jq -r '.result._id' data.json)
-          echo '::set-output name=siteUrl::'`https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com'
+          echo '::set-output name=siteUrl::'`https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com`
          
       - name: Create env file
         run: |
