@@ -16,6 +16,7 @@ jobs:
       appName: ${{ steps.parse_data.outputs.appName }}
       id: ${{ steps.parse_data.outputs.id }}
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
+      siteUrl:  ${{ steps.parse_data.outputs.siteUrl }}
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
@@ -29,6 +30,7 @@ jobs:
         run: |
           echo '::set-output name=appName::'$(jq -r '.result.appName' data.json)
           echo '::set-output name=id::'$(jq -r '.result._id' data.json)
+          echo '::set-output name=siteUrl::'`https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com'
          
       - name: Create env file
         run: |
@@ -54,6 +56,8 @@ jobs:
       - uses: actions/checkout@v2
         #if: needs.build.outputs.cache-hit != 'true'  
       - name: Deploy on Heroku
+        id: app-url
+
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -66,7 +70,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update Vendor Details    
         run: |
-          curl -X PUT -d id=needs.build.outputs.id -d siteUrl="https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails"
+          curl -X PUT -d id=${{needs.build.outputs.id}} -d siteUrl=`${{ needs.build.output.siteUrl }}` "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails"
       - name: Send mail
         #if: always()
         if: steps.cache.outputs.cache-hit != 'true'
