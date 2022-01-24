@@ -83,7 +83,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update Vendor Details    
         run: |
-          curl -X PUT -d id=${{ fetch.steps.parse_data.outputs.result }} -d siteUrl="https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails"
+          curl -X PUT -d id=`$(jq -r '.result._id' data.json)` -d siteUrl="https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails"
       - name: Send mail
         #if: always()
         if: steps.cache.outputs.cache-hit != 'true'
