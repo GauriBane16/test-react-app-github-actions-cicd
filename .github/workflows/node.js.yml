@@ -16,7 +16,7 @@ jobs:
       appName: ${{ steps.parse_data.outputs.appName }}
       id: ${{ steps.parse_data.outputs.id }}
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
-      siteUrl:  "${{ steps.parse_data.outputs.siteUrl }}-doorstep.herokuapp.com"
+      siteUrl:  "https://${{ steps.parse_data.outputs.appName }}-doorstep.herokuapp.com"
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update Vendor Details    
         run: |
-          curl -X PUT --header "Content-Type: application/json" --data-raw `{\"siteUrl\":${{ needs.deploy.outputs.siteUrl }}}` `https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{needs.deploy.outputs.id}}`
+          curl -X PUT --header "Content-Type: application/json" --data-raw `{\"isNewer\":true,\"siteUrl\":${{ needs.deploy.outputs.siteUrl }}}` `https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{needs.deploy.outputs.id}}`
       - name: Send mail
         #if: always()
         if: steps.cache.outputs.cache-hit != 'true'
