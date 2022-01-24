@@ -4,9 +4,14 @@
 name: Check for changes
 
 on:
-  schedule:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+#on:
+  #schedule:
     # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
-    - cron:  '*/16 * * * *'
+    #- cron:  '*/16 * * * *'
 
 jobs: 
     build:
@@ -49,18 +54,9 @@ jobs:
           - name: Parse data
             id: parse_data
             run: |
-              echo '::set-output name=appName::'$(jq -r '.result.appName' data.json)
-              echo '::set-output name=id::'$(jq -r '.result._id' data.json)
+              echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
+              echo '::set-output name=id::'$(jq -r '.result._id' config.json)
          
-          - name: Create env file
-            run: |
-             touch .env
-             echo REACT_APP_CLIENT_ID=`echo $(jq -r '.result.envDetails.REACT_APP_CLIENT_ID' data.json)` >>.env
-             echo REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' data.json)` >>.env
-             echo REACT_APP_STRIPE_PUBLIC_KEY=`echo $(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' data.json)`>>.env
-             echo REACT_APP_CLIENT_NAME=`echo $(jq -r '.result.vendorName' data.json)`>>.env
-             echo tp=`echo ${{ needs.build.outputs.appName}}-doorstep`
-             cat .env
           
           # Compare the response to the previous run, using a hash of the response as the cache key
           - name: Fetch Cache
@@ -68,7 +64,7 @@ jobs:
             uses: actions/cache@v2
             with:
               path: data.json
-              key: ${{ hashFiles('data.json') }}
+              key: ${{ hashFiles('config.json') }}
           - uses: actions/checkout@v2
             #if: needs.build.outputs.cache-hit != 'true'  
           - name: Deploy on Heroku
@@ -78,7 +74,7 @@ jobs:
             with:
               heroku_api_key: ${{secrets.HEROKU_API_KEY}}
               heroku_app_name: "${{ steps.parse_data.outputs.appName }}-doorstep"
-              heroku_email: "sunitagauri16@gmail.com"
+              heroku_email: "sunitagauri16@gmail.com"  
           
     notify: 
         runs-on: ubuntu-latest
