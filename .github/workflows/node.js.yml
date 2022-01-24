@@ -16,7 +16,7 @@ jobs:
       appName: ${{ steps.parse_data.outputs.appName }}
       id: ${{ steps.parse_data.outputs.id }}
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
-      siteUrl:  ${{ steps.parse_data.outputs.siteUrl }}
+      siteUrl:  "${{ steps.parse_data.outputs.siteUrl }}-doorstep.herokuapp.com"
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
@@ -30,7 +30,6 @@ jobs:
         run: |
           echo '::set-output name=appName::'$(jq -r '.result.appName' data.json)
           echo '::set-output name=id::'$(jq -r '.result._id' data.json)
-          echo '::set-output name=siteUrl::'`https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com`
          
       - name: Create env file
         run: |
