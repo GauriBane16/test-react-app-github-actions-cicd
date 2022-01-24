@@ -45,7 +45,7 @@ jobs:
         id: parse_data
         run: |
           echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
-          echo REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' data.json)` >>.env
+          echo '::set-output name=id::'$(jq -r '.result._id' data.json)
          
       - name: Create env file
         run: |
@@ -54,6 +54,7 @@ jobs:
          echo REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' data.json)` >>.env
          echo REACT_APP_STRIPE_PUBLIC_KEY=`echo $(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' data.json)`>>.env
          echo REACT_APP_CLIENT_NAME=`echo $(jq -r '.result.vendorName' data.json)`>>.env
+         echo tp=`echo ${{ fetch.steps.parse_data.outputs.result }}-doorstep`
          cat .env
           
       # Compare the response to the previous run, using a hash of the response as the cache key
@@ -68,12 +69,12 @@ jobs:
      needs : [build,fetch]
      steps:
       - uses: actions/checkout@v2
-        #if: steps.cache.outputs.cache-hit != 'true'  
+        #if: fetch.steps.cache.outputs.cache-hit != 'true'  
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
+          heroku_app_name: "${{ fetch.steps.parse_data.outputs.result }}-doorstep"
           heroku_email: "sunitagauri16@gmail.com"
   notify: 
      runs-on: ubuntu-latest
@@ -82,7 +83,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update Vendor Details    
         run: |
-          curl -X PUT -d id=$(jq -r '.result.envDetails.REACT_APP_API_URL' data.json) -d siteUrl="https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails"
+          curl -X PUT -d id=${{ fetch.steps.parse_data.outputs.result }} -d siteUrl="https://${{ steps.parse_data.outputs.result }}-doorstep.herokuapp.com" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails"
       - name: Send mail
         #if: always()
         if: steps.cache.outputs.cache-hit != 'true'
@@ -97,7 +98,7 @@ jobs:
           # email subject
           subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
           # email body as text
-          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.result }}."
+          body: "There's been a change! someField is now ${{ fetch.steps.parse_data.outputs.result }}."
           # comma-separated string, send email to
           to: sunitagamne16@gmail.com
           # from email name
