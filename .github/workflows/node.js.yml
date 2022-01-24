@@ -37,7 +37,7 @@ jobs:
          echo REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' data.json)` >>.env
          echo REACT_APP_STRIPE_PUBLIC_KEY=`echo $(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' data.json)`>>.env
          echo REACT_APP_CLIENT_NAME=`echo $(jq -r '.result.vendorName' data.json)`>>.env
-         echo tp=`echo ${{ fetch.steps.parse_data.outputs.result }}-doorstep`
+         echo tp=`echo ${{ needs.build.outputs.appName}}-doorstep`
          cat .env
           
       # Compare the response to the previous run, using a hash of the response as the cache key
