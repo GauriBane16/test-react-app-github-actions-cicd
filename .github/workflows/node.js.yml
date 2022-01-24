@@ -1,106 +1,77 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Check for changes
+name: Node.js CI
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-#on:
-  #schedule:
-    # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
-    #- cron:  '*/16 * * * *'
 
-jobs: 
-    build:
-      runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-      strategy:
-        matrix:
-          node-version: [12.x]
+    strategy:
+      matrix:
+        node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-      steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install build and test  
-        run: |
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install build and test  
+      run: |
           npm i
           npm run build --if-present
           npm test
-        env : 
-          CI : true
-    deploy :
-        runs-on: ubuntu-latest
-        needs: build
-        outputs:
-          appName: ${{ steps.parse_data.outputs.appName }}
-          id: ${{ steps.parse_data.outputs.id }}
-          cache-hit: ${{ steps.cache.outputs.cache-hit }}
-          siteUrl:  "https://${{ steps.parse_data.outputs.appName }}-doorstep.herokuapp.com"
-        steps:
-          - uses: actions/checkout@v2
-          - name: fetch data using curl
-            run: |
-              curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o config.json
+      env : 
+        CI : true  
+  fetch :
+     runs-on: ubuntu-latest
+     needs : build
+     steps:
+      - uses: actions/checkout@v2
+      - name: fetch data using curl
+        run: curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o data.json
+      # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
+      - name: Parse data
+        id: parse_data
+        run: echo '::set-output name=result::'$(jq -r '.result.appName' data.json)
           
-          
-          # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
-          - name: Parse data
-            id: parse_data
-            run: |
-              echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
-              echo '::set-output name=id::'$(jq -r '.result._id' config.json)
-         
-          
-          # Compare the response to the previous run, using a hash of the response as the cache key
-          - name: Fetch Cache
-            id: cache
-            uses: actions/cache@v2
-            with:
-              path: data.json
-              key: ${{ hashFiles('config.json') }}
-          - uses: actions/checkout@v2
-            #if: needs.build.outputs.cache-hit != 'true'  
-          - name: Deploy on Heroku
-            id: app-url
-
-            uses: akhileshns/heroku-deploy@v3.12.12
-            with:
-              heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-              heroku_app_name: "${{ steps.parse_data.outputs.appName }}-doorstep"
-              heroku_email: "sunitagauri16@gmail.com"  
-          
-    notify: 
-        runs-on: ubuntu-latest
-        needs : deploy
-        steps:
-          - uses: actions/checkout@v2
-          - name: Update Vendor Details    
-            run: |
-              curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{needs.deploy.outputs.id}}/${{ needs.deploy.outputs.siteUrl }}"
-          - name: Send mail
-            if: always()
-            #if: steps.cache.outputs.cache-hit != 'true'
-            uses: dawidd6/action-send-mail@v2
-            with:
-              # mail server settings
-              server_address: smtp.gmail.com
-              server_port: 465
-              # user credentials
-              username: ${{ secrets.EMAIL_USERNAME }}
-              password: ${{ secrets.EMAIL_PASSWORD }}
-              # email subject
-              subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
-              # email body as text
-              body: "There's been a change! someField is now ${{ needs.build.outputs.appName }}"
-              # comma-separated string, send email to
-              to: sunitagamne16@gmail.com
-              # from email name
-              from: Gauri Bane    
-      
+      # Compare the response to the previous run, using a hash of the response as the cache key
+      - name: Fetch Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: data.json
+          key: ${{ hashFiles('data.json') }}  
+      - name: Send mail
+        if: always()
+        uses: dawidd6/action-send-mail@v2
+        with:
+          # mail server settings
+          server_address: smtp.gmail.com
+          server_port: 465
+          # user credentials
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          # email subject
+          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+          # email body as text
+          body: "There's been a change! someField is now ${{ steps.parse_data.outputs.result }}."
+          # comma-separated string, send email to
+          to: sunitagamne16@gmail.com
+          # from email name
+          from: Gauri Bane    
+      - name: Deploy on Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+	      if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "${{ steps.parse_data.outputs.result }}-doorstep"
+          heroku_email: "sunitagauri16@gmail.com"
