@@ -40,7 +40,7 @@ jobs:
       - name: Create env file
         run: |
              touch .env
-             API_KEY:"Hello"
+             echo API_KEY:"Hello" > .env
              cat .env  
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
