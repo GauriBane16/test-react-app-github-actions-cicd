@@ -66,10 +66,7 @@ jobs:
           buildpack: "https://github.com/HashNuke/heroku-buildpack-elixir.git"
           healthcheck: "https://${{ steps.parse_data.outputs.appName }}-doorstep.herokuapp.com/health"
           procfile: "web: npm start"
-          env_file: ".env"
-        env:
-          HD_FIREBASE_API_KEY: "Hi"
-          HD_RANDOM_DATA: "Hello"
+         
       - name: Update Vendor Details    
         run: |
           curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
