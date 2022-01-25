@@ -43,12 +43,6 @@ jobs:
           heroku_app_name: "${{ steps.parse_data.outputs.appName }}-doorstep"
           heroku_email: "sunitagauri16@gmail.com"
           procfile: "web: npm start"
-        env:
-          REACT_APP_CLIENT_ID=`$(jq -r '.result.envDetails.REACT_APP_CLIENT_ID' config.json)`
-          REACT_APP_API_URL=`$(jq -r '.result.envDetails.REACT_APP_API_URL' config.json)`
-          REACT_APP_STRIPE_PUBLIC_KEY=`$(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' config.json)`
-          REACT_APP_VENDOR_NAME=`$(jq -r '.result.vendorName' config.json)`
-          REACT_APP_PREFIX=`${{ steps.parse_data.outputs.appName }}`
           
       - name: Update Vendor Details    
         run: |
