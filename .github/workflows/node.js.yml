@@ -56,7 +56,17 @@ jobs:
         with:
           path: config.json
           key: ${{ hashFiles('config.json') }}
-       #if: needs.build.outputs.cache-hit != 'true'    
+       #if: steps.cache.outputs.cache-hit != 'true'   
+       
+      - name: Create env file
+        run: |
+             touch .env
+             echo REACT_APP_CLIENT_ID=`echo $(jq -r '.result.envDetails.REACT_APP_CLIENT_ID' data.json)` >.env
+             echo REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' data.json)` >.env
+             echo REACT_APP_STRIPE_PUBLIC_KEY=`echo $(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' data.json)`>.env
+             echo REACT_APP_VENDOR_NAME=`echo $(jq -r '.result.vendorName' data.json)`>.env
+             echo REACT_APP_PREFIX=`echo ${{ steps.parse_data.outputs.appName }}`>.env
+             cat .env  
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
