@@ -36,11 +36,7 @@ jobs:
           path: config.json
           key: ${{ hashFiles('config.json') }}
        #if: steps.cache.outputs.cache-hit != 'true' 
-      - name: Create env file
-        run: |
-           touch .env
-           echo "key:"Hello"
-           cat .env
+     
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
