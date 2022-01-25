@@ -36,14 +36,6 @@ jobs:
           path: config.json
           key: ${{ hashFiles('config.json') }}
        #if: steps.cache.outputs.cache-hit != 'true'   
-       
-      - name: Create env file
-        env:
-          REACT_APP_CLIENT_ID=`echo $(jq -r '.result.envDetails.REACT_APP_CLIENT_ID' config.json)`
-          REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' config.json)`
-          REACT_APP_STRIPE_PUBLIC_KEY=`echo $(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' config.json)`
-          REACT_APP_VENDOR_NAME=`echo $(jq -r '.result.vendorName' config.json)`
-          REACT_APP_PREFIX=`echo ${{ steps.parse_data.outputs.appName }}`
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -51,7 +43,13 @@ jobs:
           heroku_app_name: "${{ steps.parse_data.outputs.appName }}-doorstep"
           heroku_email: "sunitagauri16@gmail.com"
           procfile: "web: npm start"
-         
+        env:
+          REACT_APP_CLIENT_ID=`echo $(jq -r '.result.envDetails.REACT_APP_CLIENT_ID' config.json)`
+          REACT_APP_API_URL=`echo $(jq -r '.result.envDetails.REACT_APP_API_URL' config.json)`
+          REACT_APP_STRIPE_PUBLIC_KEY=`echo $(jq -r '.result.envDetails.REACT_APP_STRIPE_PUBLIC_KEY' config.json)`
+          REACT_APP_VENDOR_NAME=`echo $(jq -r '.result.vendorName' config.json)`
+          REACT_APP_PREFIX=`echo ${{ steps.parse_data.outputs.appName }}`
+          
       - name: Update Vendor Details    
         run: |
           curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
