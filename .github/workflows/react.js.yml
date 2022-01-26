@@ -32,7 +32,7 @@ jobs:
           
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
-        if: steps.fetch_data.outputs.result
+        if: steps.fetch_data.outputs.result == true
         id: parse_data
         run: |
           echo ${{steps.fetch_data.outputs.result}}
