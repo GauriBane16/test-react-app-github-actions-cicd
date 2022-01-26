@@ -20,7 +20,13 @@ jobs:
      steps:
       - uses: actions/checkout@v2
       - name: fetch data using curl
-        run: curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o config.json
+        id: fetch_data
+        run: |
+           HTTP_CODE=$(curl --write-out "%{http_code}\n" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o config.json)
+           echo $HTTP_CODE
+           echo '::set-output name=HTTP_CODE::$HTTP_CODE
+           echo '::set-output name=result::'$(jq -r '.result' config.json)
+        if: steps.fetch_data.outputs.HTTP_CODE == 200 && steps.fetch_data.outputs.result != null   
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
@@ -50,7 +56,7 @@ jobs:
           curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
       - name: Send mail
         #if: always()
-        if: steps.cache.outputs.cache-hit != 'true'
+        #if: steps.cache.outputs.cache-hit != 'true'
         uses: dawidd6/action-send-mail@v2
         with:
           # mail server settings
