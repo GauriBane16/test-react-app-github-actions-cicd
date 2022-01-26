@@ -33,7 +33,7 @@ jobs:
       - name: Parse data
         id: parse_data
         run: |
-          if [${{ steps.fetch_data.outputs.result }}==false];then
+          if [${{ steps.fetch_data.outputs.result }}=='false'];then
           echo "Hi"
           else
           echo "Hello"
