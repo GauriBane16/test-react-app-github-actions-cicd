@@ -20,7 +20,6 @@ jobs:
      steps:
       - uses: actions/checkout@v2   
       - name: fetch data using curl
-        id: fetch_data
         run: |
            curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o config.json
            data=$(jq -r '.result' config.json)
@@ -29,7 +28,7 @@ jobs:
             else
             echo ::set-output name=result::true
            fi
-          
+        id: fetch_data
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         if: ${{steps.fetch_data.outputs.result}}==true
