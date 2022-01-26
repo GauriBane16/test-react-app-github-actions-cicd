@@ -28,9 +28,10 @@ jobs:
             else
             echo ::set-output name=result::true
            fi
-        if: steps.fetch_data.outputs.result==true  
+          
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
+        if: steps.fetch_data.outputs.result==true
         id: parse_data
         run: |
           echo ${{ needs.fetch.outputs.result }}
