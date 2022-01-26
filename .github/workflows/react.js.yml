@@ -25,6 +25,7 @@ jobs:
            data=$(jq -r '.result' config.json)
            if [ "$data" == null ]; then
             echo ::set-output name=result::false
+            exit 1
             else
             echo ::set-output name=result::true
            fi
