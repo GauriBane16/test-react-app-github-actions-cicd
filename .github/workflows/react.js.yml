@@ -33,7 +33,6 @@ jobs:
       - name: Parse data
         id: parse_data
         run: |
-          echo data=$(jq -r '.result' config.json)
           echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
           echo '::set-output name=id::'$(jq -r '.result._id' config.json)
           
@@ -44,9 +43,9 @@ jobs:
         with:
           path: config.json
           key: ${{ hashFiles('config.json') }}
-       #if: steps.cache.outputs.cache-hit != 'true' 
      
       - name: Deploy on Heroku
+        if: steps.cache.outputs.cache-hit != 'true'
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -59,8 +58,8 @@ jobs:
           curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
       - name: Send mail
         #if: always()
-        #if: steps.cache.outputs.cache-hit != 'true'
-        if: steps.fetch_data.outputs.result==true
+        if: steps.cache.outputs.cache-hit != 'true'
+        #if: steps.fetch_data.outputs.result==true
         uses: dawidd6/action-send-mail@v2
         with:
           # mail server settings
