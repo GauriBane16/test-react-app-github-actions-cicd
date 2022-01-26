@@ -14,12 +14,11 @@ on:
    # - cron:  '*/16 * * * *'
     
 jobs:
-  fetch :
-    runs-on: ubuntu-latest
-    outputs:
-          result: ${{ steps.fetch_data.outputs.result }}
-    steps:
-      - uses: actions/checkout@v2
+        
+  build :
+     runs-on: ubuntu-latest
+     steps:
+      - uses: actions/checkout@v2   
       - name: fetch data using curl
         id: fetch_data
         run: |
@@ -29,13 +28,7 @@ jobs:
             else
             echo ::set-output name=result::true
            fi
-        
-  build :
-     runs-on: ubuntu-latest
-     needs: fetch
-     #if: needs.fetch.outputs.result==true
-     steps:
-      - uses: actions/checkout@v2   
+        if: steps.fetch_data.outputs.result==true  
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
