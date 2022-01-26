@@ -3,15 +3,15 @@
 
 name: React.js CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 #on:
-  #schedule:
+  #push:
+    #branches: [ main ]
+  #pull_request:
+    #branches: [ main ]
+on:
+  schedule:
     # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
-   # - cron:  '*/16 * * * *'
+    - cron:  '*/16 * * * *'
     
 jobs:
         
@@ -57,7 +57,7 @@ jobs:
         run: |
           curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
       - name: Send mail
-        #if: always()
+        if: always()
         #if: steps.fetch_data.outputs.result==true
         uses: dawidd6/action-send-mail@v2
         with:
