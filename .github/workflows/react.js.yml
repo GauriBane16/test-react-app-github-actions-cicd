@@ -24,6 +24,7 @@ jobs:
         id: fetch_data
         run: |
            curl "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails" -o config.json
+           echo data=$(jq -r '.result' config.json)
            if [ $(jq -r '.result' config.json) != null ]; then
             echo ::set-output name=result::true
             else
