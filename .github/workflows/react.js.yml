@@ -33,13 +33,14 @@ jobs:
   build :
      runs-on: ubuntu-latest
      needs: fetch
-     if: needs.fetch.outputs.result==true
+     #if: needs.fetch.outputs.result==true
      steps:
       - uses: actions/checkout@v2   
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
         id: parse_data
         run: |
+          echo ${{ needs.fetch.outputs.result }}
           echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
           echo '::set-output name=id::'$(jq -r '.result._id' config.json)
           
