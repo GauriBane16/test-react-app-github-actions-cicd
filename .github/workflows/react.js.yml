@@ -26,9 +26,10 @@ jobs:
            echo $HTTP_CODE
            echo '::set-output name=HTTP_CODE::$HTTP_CODE
            echo '::set-output name=result::'$(jq -r '.result' config.json)
-        if: steps.fetch_data.outputs.HTTP_CODE == 200 && steps.fetch_data.outputs.result != null   
+          
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
+        if: steps.fetch_data.outputs.HTTP_CODE == 200 && steps.fetch_data.outputs.result != null 
         id: parse_data
         run: |
           echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
