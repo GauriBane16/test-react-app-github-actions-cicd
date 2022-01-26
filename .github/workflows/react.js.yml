@@ -33,7 +33,7 @@ jobs:
   build :
      runs-on: ubuntu-latest
      needs: fetch
-     if: needs.fetch.outputs.result
+     if: needs.fetch.outputs.result=='true'
      steps:
       - uses: actions/checkout@v2   
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
