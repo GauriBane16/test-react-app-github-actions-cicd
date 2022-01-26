@@ -31,15 +31,16 @@ jobs:
           
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
-        if: steps.fetch_data.outputs.result==true
+        if: $(jq -r '.result' config.json)==null
         id: parse_data
         run: |
+          echo data=$(jq -r '.result' config.json)
           echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
           echo '::set-output name=id::'$(jq -r '.result._id' config.json)
           
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
-        if: steps.fetch_data.outputs.result==true
+        if: $(jq -r '.result' config.json)==null
         id: cache
         uses: actions/cache@v2
         with:
@@ -48,7 +49,7 @@ jobs:
        #if: steps.cache.outputs.cache-hit != 'true' 
      
       - name: Deploy on Heroku
-        if: steps.fetch_data.outputs.result==true
+        if: $(jq -r '.result' config.json)==null
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -57,7 +58,7 @@ jobs:
           procfile: "web: npm start"
           
       - name: Update Vendor Details 
-        if: steps.fetch_data.outputs.result==true
+        if: $(jq -r '.result' config.json)==null
         run: |
           curl -X PUT --header "Content-Type: application/json" "https://doorstep-node-api.herokuapp.com/api/v1.0/vendor/vendorDetails/${{steps.parse_data.outputs.id}}/${{ steps.parse_data.outputs.appName }}"
       - name: Send mail
