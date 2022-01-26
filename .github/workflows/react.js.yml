@@ -28,7 +28,7 @@ jobs:
           
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
-        if: steps.fetch_data.outputs.data != 'null' 
+        if: steps.fetch_data.outputs.result != null
         id: parse_data
         run: |
           echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
