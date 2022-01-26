@@ -27,7 +27,7 @@ jobs:
             echo ::set-output name=result::true
             else
             echo ::set-output name=result::false
-           
+           fi
            
       # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
       - name: Parse data
