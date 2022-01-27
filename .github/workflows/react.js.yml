@@ -13,6 +13,10 @@ on:
     # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
     - cron:  '*/16 * * * *'
     
+defaults:
+  run:
+    working-directory: src    
+    
 jobs:
         
   build :
