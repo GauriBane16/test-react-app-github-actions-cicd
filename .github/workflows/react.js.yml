@@ -40,14 +40,6 @@ jobs:
         run: |
           echo '::set-output name=appName::'$(jq -r '.result.appName' config.json)
           echo '::set-output name=id::'$(jq -r '.result._id' config.json)
-          
-      # Compare the response to the previous run, using a hash of the response as the cache key
-      - name: Fetch Cache
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: config.json
-          key: ${{ hashFiles('config.json') }}
      
       - name: Deploy on Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
