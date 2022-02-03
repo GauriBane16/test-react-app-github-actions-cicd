@@ -1,23 +1,15 @@
 import Header from "../library/components/Header";
-import Content from "../library/components/Content";
-import styled from "styled-components";
-
-import Paper from "@mui/material/Paper";
-// import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CartTable from "../library/components/CartTable";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import Theme from "../library/styleHelpers/customTheme";
 import Button from "../library/components/Buttons";
 import { useNavigate } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import { cartActions } from "../app/reducers/cartReducer";
 
-const Item = styled(Paper)(({ theme }) => ({
-  color: "#ffddff",
-}));
+
 
 const Cart = () => {
   const data = useSelector((state) => state);

@@ -1,20 +1,19 @@
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Rating from "@mui/material/Rating";
-import IncDec from "./IncDec";
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Rating from '@mui/material/Rating';
+import IncDec from './IncDec';
 
-const SummaryCard=(props)=>{
-  // let props={
-  //     farm: "Tharamis Farm",
-  //     freshness: "1 day old",
-  // }
-  console.log("props.product", props);
-  return (
-    <Card sx={{ padding: "5px", borderBottom: "1px solid #C1C1C1" }}>
+export default function SummaryCard(props){
+    // let props={
+    //     farm: "Tharamis Farm",
+    //     freshness: "1 day old",
+    // }
+    console.log("props.product", props.product);
+    return (
+        <Card sx={{ padding: "5px", borderBottom: "1px solid #C1C1C1" }}>
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <Grid container spacing={2} fullwidth={1}>
@@ -46,17 +45,17 @@ const SummaryCard=(props)=>{
                             <table style={{padding:'0px', margin:'0px'}}>
                                 <tr>
                                     <td style={{color:'#C1C1C1'}}>Farm:</td>
-                                    <td>{props.farm}</td>
+                                    <td>{props1.farm}</td>
                                 </tr>
                                 <tr>
                                     <td style={{color:'#C1C1C1'}}>Freshness:</td>
-                                    <td>{props.freshness}</td>
+                                    <td>{props1.freshness}</td>
                                 </tr>
                             </table>    
                         </Grid> */}
-            {/* <Grid item xs={12}>
+            <Grid item xs={12}>
                         <Rating></Rating>
-                        </Grid> */}
+                        </Grid>
             <Grid item xs={12}>
               <Grid container>
                 <Grid item>
@@ -87,7 +86,5 @@ const SummaryCard=(props)=>{
 
       <CardActions></CardActions>
     </Card>
-  );
+    );
 }
-
-export default SummaryCard;

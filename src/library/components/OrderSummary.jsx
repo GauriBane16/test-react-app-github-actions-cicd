@@ -1,11 +1,12 @@
 import Grid from '@mui/material/Grid';
 import SummaryCard from './SummaryCard';
-import '../../App.css'
+// import '../../App.css'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import { useSelector } from "react-redux";
+import { TableBody } from '@mui/material';
 
 
 export default function OrderSummary(){
@@ -29,17 +30,18 @@ export default function OrderSummary(){
             </Grid>
         </Grid>
             <Grid item fullwidth={1}>
-                <Grid container item xs zeroMinWidth className='example' sx={{maxHeight:'55vh', overflow:'scroll'}}>
-                {productList && productList.length!=0?productList.map((element, index) => {
-                    debugger;
+                <Grid container  className='example' sx={{maxHeight:'55vh', overflow:'scroll'}}>
+                {(productList && productList.length!==0)?productList.map((element, index) => (
                     <Grid item key={index}>
-                        <SummaryCard product={element}/>
+                       
+                        <SummaryCard ></SummaryCard>
                     </Grid>
-                }):''} 
+                )):''} 
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <Table item xs zeroMinWidth fullwidth={1} sx={{fontWeight:'bold'}}>
+                <Table    fullwidth={1} sx={{fontWeight:'bold'}}>
+                    <TableBody>
                     <TableRow>
                         <TableCell  sx={{fontWeight:'bold'}}></TableCell>
                         <TableCell  sx={{fontWeight:'bold'}}  align="right">{subTotal} INR</TableCell>
@@ -52,17 +54,21 @@ export default function OrderSummary(){
                         <TableCell  sx={{fontWeight:'bold'}}>Shipping</TableCell>
                         <TableCell  sx={{fontWeight:'bold'}}  align="right">0 INR</TableCell>
                     </TableRow>
+                    </TableBody>
                 </Table>
             </Grid>
             <Grid item xs={12}>
-                <Table item xs zeroMinWidth fullwidth={1} sx={{fontWeight:'bold'}}>
+                <Table    fullwidth={1} sx={{fontWeight:'bold'}}>
+                <TableBody>
                     <TableRow>
+                    
                         <TableCell>
                             <Typography   sx={{fontWeight:'bold'}}>Total</Typography>
                             <Typography sx={{color:'#C1C1C1'}}>Guaranteed delivery day:  June 12, 2020</Typography>
                         </TableCell>
                         <TableCell  sx={{fontWeight:'bold'}}  align="right"><Typography variant="h6"  sx={{fontWeight:'bold'}}>{subTotal+tax} INR</Typography></TableCell>
                     </TableRow>
+                    </TableBody>
                 </Table>
             </Grid>
         </Grid>

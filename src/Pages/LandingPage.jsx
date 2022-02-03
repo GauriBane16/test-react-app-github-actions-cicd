@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "./../library/components/Header";
-import brands from "../services/brands";
-import Brands from "../library/components/Brands";
+// import brands from "../services/brands";
+// import Brands from "../library/components/Brands";
 import Categories from "../library/components/Categories";
 import ImagesGrid from "../library/components/Grid";
-import Slider from "../library/components/Slider";
+// import Slider from "../library/components/Slider";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { useSelector, useDispatch } from "react-redux";
 import { productActions } from "../app/reducers/productReducer";
 
 const LandingPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  // const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch();
   const data = useSelector((state) => state);
   const productList = data.productReducer.productList.result;
   const categoryList = data.categoryReducer.categoryList.result;
   useEffect(() => {
     dispatch(productActions.fetchProduct());
-  }, []);
+  });
   return (
     <Container maxWidth="false" justify="center">
       <Grid container>

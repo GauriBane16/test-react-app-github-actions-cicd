@@ -2,8 +2,6 @@ import { styled } from "@mui/material";
 import React,{useEffect} from "react";
 import { GoogleLogin } from "react-google-login";
 import Theme from "../styleHelpers/customTheme";
-import ApiInfo from "../../services/ApiInfoService";
-import { postApi } from "../../services/ApiService";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../app/reducers/authReducer";
@@ -21,23 +19,23 @@ const CustomGoogleLogin = styled(GoogleLogin)`
 `;
 
 
-// function getData(){
-//   return useSelector(state => console.log(state))
-// }
-
 const GLogin = ({ children }) => {
   const dispatch = useDispatch();
   let navigate = useNavigate();
   const LoggedInUser=useSelector(state => state);
-  console.log("LoggedInUser",LoggedInUser)
   const userInfo=LoggedInUser.authReducer.userInfo
   const clientId = config.result.envDetails.REACT_APP_CLIENT_ID;
   
   useEffect(() => {
-    debugger;
-    if (userInfo?.statusCode==200 && window.localStorage.getItem("token") === null)
-       setDetailsInLocalStorage(userInfo.result);
-  }, [navigate, userInfo]);
+    if (userInfo?.statusCode===200 && window.localStorage.getItem("token") === null){
+      window.localStorage.setItem("user", JSON.stringify(userInfo.result));
+    window.localStorage.setItem("token", JSON.stringify(userInfo.result.token));
+    userInfo.userInfo.result.role==='Admin' && navigate('/configuration');
+    userInfo.userInfo.result.role==='User' && navigate('/home');
+    if(userInfo.result.role!=='Admin' && userInfo.result.role!=='User')
+        navigate('/error');
+    }
+  }, [userInfo,navigate]);
   
 const onLoginSuccess=(res)=>{
   let apiDdata={
@@ -58,15 +56,6 @@ const onLoginSuccess=(res)=>{
 }
   
 
-  const setDetailsInLocalStorage=(result)=>{
-    console.log("result",result)
-    window.localStorage.setItem("user", JSON.stringify(result));
-    window.localStorage.setItem("token", JSON.stringify(result.token));
-    userInfo.result.role==='Admin' && navigate('/configuration');
-    userInfo.result.role==='User' && navigate('/home');
-    if(userInfo.result.role!=='Admin' && userInfo.result.role!=='User')
-        navigate('/error');
-  }
 
   const onLoginFailure = (res) => {
     console.log("Login Failure", res);
