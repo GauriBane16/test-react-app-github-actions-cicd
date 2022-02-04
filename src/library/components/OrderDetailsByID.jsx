@@ -6,20 +6,23 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
+import { TableBody } from "@mui/material";
 
-export default function OrderSummary() {
+export default function OrderDetailsByID() {
   const data = useSelector((state) => state);
+  console.log("data",data)
   const productList = data.cartReducer.products;
+  console.log("productList",productList)
   const paymentInfo = data.cartReducer.paymentInfo;
   const today=new Date();
   const tomorrow=new Date(today.setDate(today.getDate()+1)).toDateString();
-//   console.log("today",today)
+console.log("today",today)
   return (
     <Grid container rowSpacing={5}>
       <Grid item>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <h2 style={{ margin: "0", padding: "0" }}>Order Summary</h2>
+            <h2 style={{ margin: "0", padding: "0" }}>Order Details</h2>
           </Grid>
           <Grid item xs={12}>
             <p style={{ color: "#C1C1C1", margin: "0", padding: "0" }}>
@@ -29,15 +32,14 @@ export default function OrderSummary() {
           </Grid>
         </Grid>
       </Grid>
-      {/* <Grid item fullwidth={1}>
+      <Grid item fullwidth={1}>
         <Grid
           container
           item
-          xs
-          zeroMinWidth
           className="example"
-          sx={{ maxHeight: "55vh", overflow: "scroll" }}
+          
         >
+          {/* sx={{ maxHeight: "55vh", overflow: "scroll" }} */}
           {productList && productList.length != 0
             ? productList.map((element, index) => (
                 <Grid item key={index}>
@@ -46,9 +48,10 @@ export default function OrderSummary() {
               ))
             : ""}
         </Grid>
-      </Grid> */}
-      <Grid item xs={12}>
+      </Grid>
+      {/* <Grid item xs={12}>
         <Table item  fullwidth={1} sx={{ fontWeight: "bold" }}>
+            <TableBody>
           <TableRow>
             <TableCell sx={{ fontWeight: "bold" }}>SubTotal</TableCell>
             <TableCell sx={{ fontWeight: "bold" }} align="right">
@@ -67,10 +70,12 @@ export default function OrderSummary() {
               0 INR
             </TableCell>
           </TableRow>
+          </TableBody>
         </Table>
       </Grid>
       <Grid item xs={12}>
         <Table item  fullwidth={1} sx={{ fontWeight: "bold" }}>
+            <TableBody>
           <TableRow>
             <TableCell>
               <Typography sx={{ fontWeight: "bold" }}>Total</Typography>
@@ -84,8 +89,9 @@ export default function OrderSummary() {
               </Typography>
             </TableCell>
           </TableRow>
+          </TableBody>
         </Table>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }

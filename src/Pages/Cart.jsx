@@ -1,4 +1,4 @@
-import Header from "../library/components/Header";
+import Header from "../library/components/Header1";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CartTable from "../library/components/CartTable";
@@ -17,14 +17,16 @@ const Cart = () => {
   const dispatch = useDispatch();
   const productList = data.cartReducer.products;
   let subTotal = productList.map(product=>product.total).reduce((prev,next)=>prev+next);
+  const tax = (subTotal * 12) / 100;
+  const totalPayment=Math.round(subTotal+tax);
   const navigateToCheckout=()=>{
-    dispatch(cartActions.addSubTotal(subTotal));
+    dispatch(cartActions.addPaymentInfo({amount:subTotal,tax:tax,total:totalPayment}));
     navigate('/checkout');
   }
   return (
 
     <Container maxWidth="false" justify="center">
-      <Grid container>
+      <Grid container rowSpacing={10}>
         <Grid item xs={12}>
           <Header />
         </Grid>
@@ -34,7 +36,7 @@ const Cart = () => {
               <CartTable />
             </Grid>
             <Grid item  xs={3} sx={{display:"flex", direction:"row", alignItems:"center"}}>
-              <Grid item container xs={12} rowSpacing={4}>
+              <Grid item xs zeroMinWidth container xs={12} rowSpacing={4}>
                 <Grid item xs={12}>
                   <Grid container>
                     <Grid item xs={8} fullwidth={1}>
@@ -44,7 +46,7 @@ const Cart = () => {
                       <Typography variant="h5">{subTotal} INR</Typography>
                     </Grid>
                   </Grid>
-                  <Divider item xs={12} textAlign="left"/>
+                  {/* <Divider item xs={12} textAlign="left"/> */}
                 </Grid>
                 <Grid >
                   <Typography variant="p">Shipping and taxes will be calculated at the checkout</Typography>

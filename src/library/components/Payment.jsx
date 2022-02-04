@@ -6,7 +6,7 @@ import ApiInfo from "../../services/ApiInfoService";
 import { postApi } from "../../services/ApiService";
 import config from "../../config.json";
 
-export default function Payment() {
+export default function Payment(props) {
   const [stripeToken, setStripeToken] = useState(null);
   const logo=config.result.template_Details.logoUrl;
   
@@ -40,7 +40,7 @@ export default function Payment() {
       email="sunitagamne16@gmail.com"
       description="Your total bill is 3000 usd"
     >
-      <Button className="Large">Pay</Button>
+      <Button className="Large" > Pay</Button>
     </StripeCheckout>
   );
 }

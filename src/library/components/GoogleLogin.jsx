@@ -27,11 +27,12 @@ const GLogin = ({ children }) => {
   const clientId = config.result.envDetails.REACT_APP_CLIENT_ID;
   
   useEffect(() => {
+    debugger;
     if (userInfo?.statusCode===200 && window.localStorage.getItem("token") === null){
       window.localStorage.setItem("user", JSON.stringify(userInfo.result));
     window.localStorage.setItem("token", JSON.stringify(userInfo.result.token));
-    userInfo.userInfo.result.role==='Admin' && navigate('/configuration');
-    userInfo.userInfo.result.role==='User' && navigate('/home');
+    userInfo.result.role==='Admin' && navigate('/configuration');
+    userInfo.result.role==='User' && navigate('/home');
     if(userInfo.result.role!=='Admin' && userInfo.result.role!=='User')
         navigate('/error');
     }
