@@ -5,12 +5,25 @@ import Icon from "./Icon";
 import Theme from "../styleHelpers/customTheme";
 import { useNavigate } from "react-router-dom";
 import logoImg from "../images/logo.png";
+import IconButton from '@mui/material/IconButton';
+import { useSelector, useDispatch } from "react-redux";
+// import { logoutActions } from "../../app/reducers/logoutReducer";
 
 const AdminHeader = () => {
-  const navigate=useNavigate
+  const navigate=useNavigate();
+  // const dispatch = useDispatch();
+  const data=useSelector(state => state);
+  console.log("data",data)
   const logout=()=>{
+    console.log("Logout")
+    try{
+    // dispatch(logoutActions.fetchLogout())
     window.localStorage.clear();
-    navigate("/")
+    window.sessionStorage.clear();
+    navigate("/admin")
+    }catch(error){
+
+    }
   }
   return (
     <Content className="HeaderContent">
@@ -18,7 +31,12 @@ const AdminHeader = () => {
         <Logo src={logoImg} className="responsiveImg" width={120} />
       </Content>
       <Content className="HeaderLogoContainer">
-        <Icon onClick={logout} sx={{ color: `${Theme.Colors.primary}` }}>account_circle</Icon>
+      <IconButton onClick={logout}>
+                                        <Icon sx={{ color: `${Theme.Colors.primary || '#2592AA'}`, fontSize: 30 }}>
+                                            account_circle_outlined
+                                        </Icon>
+                                    </IconButton>
+        {/* <Icon onClick={logout} sx={{ color: `${Theme.Colors.primary}` }}>account_circle</Icon> */}
       </Content>
     </Content>
   );

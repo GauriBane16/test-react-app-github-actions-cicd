@@ -12,9 +12,9 @@ export const product=(data)=>Axios.get(`user/productList?prefix=${config.result.
 
 export const payment=(data)=>Axios.post(`user/payment?prefix=${config.result.prefix}`,data,getHeader()).then((response) => response);
 
-export const order=(data)=>Axios.get(`user/order?prefix=${config.result.prefix}`,data,getHeader()).then((response) => response);
+export const order=(data)=>Axios.get(data.apiName,data,getHeader()).then((response) => response);
 
-export const logout = () => localStorage.removeItem('user')
+export const logout = () =>Axios.get(`auth/logout?prefix=${config.result.prefix}`,getHeader()).then((response) => response);
 
 export const checkUser = () => JSON.parse(localStorage.getItem('user'));
 
@@ -29,6 +29,13 @@ const getHeader=()=>{
       };
     }
     return axiosConfig;
+}
+
+const getUrl=(data)=>{
+  if(data && data.orderId!=null)
+  return `user/orderList?prefix=${config.result.prefix}&orderId=${data.orderId}`
+  else
+  return `user/orderList?prefix=${config.result.prefix}`
 }
 
 // export default auth;

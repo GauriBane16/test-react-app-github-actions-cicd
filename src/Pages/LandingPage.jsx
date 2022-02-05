@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Header from "./../library/components/Header1";
+import Header from "./../library/components/Header";
 // import brands from "../services/brands";
 // import Brands from "../library/components/Brands";
 import Categories from "../library/components/Categories";
